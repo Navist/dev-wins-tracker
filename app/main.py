@@ -1,10 +1,11 @@
 from fastapi import FastAPI
-from app.routers import users
+from app.routers import users, wins
 
 app = FastAPI()
 
 
 app.include_router(users.router)
+app.include_router(wins.router)
 
 
 # Displays how it's possible to add FastAPI functions inside the main py but it's easier and more modular to do it inside their own router files.
