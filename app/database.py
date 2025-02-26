@@ -9,6 +9,9 @@ load_dotenv(override=True)
 # postgresql://postgres:password@localhost:port/dev_wins_tracker
 # Database :// username : password @ host : port / project_table
 
+sub_tiers = {"free": 10,
+             "premium": 30,
+             "enterprise": 999}
 
 DATABASE = os.getenv('DATABASE')
 USERNAME = os.getenv('USERNAME')
