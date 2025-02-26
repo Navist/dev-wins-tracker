@@ -48,8 +48,8 @@ class OAuthAccount(Base):
 
     user = relationship("User", back_populates="user_oauth_accounts")
 
-class DevWin(Base):
-    __tablename__ = 'dev_wins'
+class PredefinedCategory(Base):
+    __tablename__ = 'predefined_categories'
 
     id = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
     category_name = Column(String, nullable=False)
@@ -64,6 +64,7 @@ class Win(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    category_name = Column(String, nullable=False)
     description = Column(Text, nullable=False)
 
     category_id = Column(Integer, nullable=False)
@@ -72,7 +73,7 @@ class Win(Base):
 
     user = relationship("User", back_populates="user_wins")
     
-    predefined_category = relationship("DevWin", primaryjoin="foreign(Win.category_id) == DevWin.id", uselist=False, back_populates="category_wins")
+    predefined_category = relationship("PredefinedCategory", primaryjoin="foreign(Win.category_id) == PredefinedCategory.id", uselist=False, back_populates="category_wins")
     custom_category = relationship("CustomCategory", primaryjoin="foreign(Win.category_id) == CustomCategory.id", uselist=False, back_populates="category_wins")
 
     @hybrid_property

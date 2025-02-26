@@ -39,13 +39,20 @@ class UserLogin(BaseModel):
     password: str
 
 
-class WinCardCreate(BaseModel):
-    title: str = Field(..., min_length=4, max_length=60)
+class WinCreate(BaseModel):
+    category_name: str = Field(..., min_length=4, max_length=60)
     description: str
+    category_id: int
+    category_type: str
+
 
 class CustomCategoryCreate(BaseModel):
     name: str
     title: str
+
+
+class CategoryResponse(BaseModel):
+    pass
 
 
 class WinResponse(BaseModel):

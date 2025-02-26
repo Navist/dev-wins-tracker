@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from app.checks import check_admin, check_db_user, get_db
 from sqlalchemy.orm import Session
-from app.schemas import WinResponse, WinCardCreate, CustomCategoryCreate
+from app.schemas import WinResponse, CustomCategoryCreate, WinCreate
 from app.models import User, Win, CustomCategory
 from app.security import verify_token
 
@@ -13,52 +13,42 @@ router = APIRouter(
 
 # Create a delete_card function that both the user and admin can delete
 
+# @router.post("/", response_model=WinResponse)
+# def create_card(card: WinCardCreate, db: Session = Depends(get_db), token_data: dict = Depends(verify_token)):
+#     # Need to get user before trying to assign card
+#     db_user = check_db_user(db, token_data)
+
+
 @router.post("/", response_model=WinResponse)
-def create_card(card: WinCardCreate, db: Session = Depends(get_db), token_data: dict = Depends(verify_token)):
-    # Need to get user before trying to assign card
-    db_user = check_db_user(db, token_data)
+def create_win(win: WinCreate, db: Session = Depends(get_db), token_data: dict = Depends(verify_token)):
+    # Should check to see if user already has a category description so we don't create duplicates
+
+    # db_win_exists = db.query(Win).filter(win.category_name == )
+
+    # if db_win_exists:
+    #     raise HTTPException(status_code=409, detail="Category description already exists")
+
+    db_win = Win(
+        user_id=token_data["user_id"],
+        category_name=win.category_name,
+        description=win.description,
+        category_id=win.category_id,
+        category_type=win.category_type
+    )
+    db.add(db_win)
+    db.commit()
+    db.refresh(db_win)
+    return db_win
 
 
 
-
-
-def read_card():
+def read_win():
     pass
 
-def update_card():
+def update_win():
     pass
 
 
-def delete_card():
+def delete_win():
     pass
 
-@router.post("/categories/{category_name}", response_model=CustomCategoryCreate)
-def create_category(category_name: str, db: Session = Depends(get_db), token_data: dict = Depends(verify_token)):
-    # We need to check if the user already has a category with that name
-    # If the category name is in predefined we set category_type == "predefine"
-    category_entry = db.query(Win).filter(Win.description == category_name).first()
-
-    if category_entry:
-        raise HTTPException(status_code=403, detail="Category already exists.")
-
-
-
-
-@router.delete("/categories/{category_id}", response_model=dict)
-def delete_category(category_id: int, db: Session = Depends(get_db), token_data: dict = Depends(verify_token)):
-    category_entry = db.query(Win).filter(Win.category_id == category_id).first()
-
-    if not category_entry:
-        raise HTTPException(status_code=404, detail="Category not found.")
-    
-    if category_entry.category_type == "custom":
-        custom_category = db.query(CustomCategory).filter(CustomCategory.id == category_id).first()
-
-        if custom_category:
-            db.delete(custom_category)
-
-            db.commit()
-            return {"message": f"Custom category '{custom_category.name}' deleted successfully."}
-        
-
-    raise HTTPException(status_code=403, detail="Cannot delete predfined categories.")
