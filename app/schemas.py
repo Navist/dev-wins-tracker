@@ -39,23 +39,29 @@ class UserLogin(BaseModel):
     password: str
 
 
-class WinCreate(BaseModel):
-    category_name: str = Field(..., min_length=4, max_length=60)
+class CategoryCreate(BaseModel):
+    name: str = Field(..., min_length=4, max_length=60)
     description: str
-    category_id: int
-    category_type: str
 
-
-class CustomCategoryCreate(BaseModel):
+class CategoryGeneric(BaseModel):
     name: str
-    title: str
-
 
 class CategoryResponse(BaseModel):
     pass
 
+class WinCreate(BaseModel):
+    category: str
+    description: str
+
+class WinDelete(BaseModel):
+    id: int
+
+class WinDeleteResponse(BaseModel):
+    category: str
+    description: str
+    reason: Optional[str] = None
+
 
 class WinResponse(BaseModel):
-    username: str
-    title: str
+    category: str
     description: str
