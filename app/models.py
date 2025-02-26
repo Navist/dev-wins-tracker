@@ -48,15 +48,13 @@ class OAuthAccount(Base):
 
     user = relationship("User", back_populates="user_oauth_accounts")
 
-class DevWin(Base):
-    __tablename__ = 'dev_wins'
+class PredefinedCategory(Base):
+    __tablename__ = 'predefined_categories'
 
     id = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
-    category_name = Column(String, nullable=False)
+    name = Column(String, nullable=False)
     description = Column(Text, nullable=False)
     created_at = Column(DateTime, nullable=False, default=func.now())
-
-    category_wins = relationship("Win", back_populates="predefined_category")
 
 
 class Win(Base):
@@ -64,30 +62,19 @@ class Win(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    category = Column(String, nullable=False)
     description = Column(Text, nullable=False)
-
-    category_id = Column(Integer, nullable=False)
-    category_type = Column(String, nullable=False)
-
 
     user = relationship("User", back_populates="user_wins")
     
-    predefined_category = relationship("DevWin", primaryjoin="foreign(Win.category_id) == DevWin.id", uselist=False, back_populates="category_wins")
-    custom_category = relationship("CustomCategory", primaryjoin="foreign(Win.category_id) == CustomCategory.id", uselist=False, back_populates="category_wins")
-
-    @hybrid_property
-    def category(self):
-        return self.predefined_category if self.category_type == "predefined" else self.custom_category
-
 
 class CustomCategory(Base):
     __tablename__ = "custom_categories"
 
     id = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
-    category_name = Column(String(50), nullable=False)
+    name = Column(String(50), nullable=False)
     description = Column(Text, nullable=False)
     created_at = Column(DateTime, nullable=False, default=func.now())
 
     user = relationship("User", back_populates="user_custom_categories")
-    category_wins = relationship("Win", back_populates="custom_category")

@@ -1,0 +1,114 @@
+from fastapi import APIRouter, Depends, HTTPException
+from app.checks import check_admin, check_db_user, get_db
+from sqlalchemy.orm import Session
+from app.schemas import CategoryCreate, CategoryResponse, CategoryGeneric
+from app.models import User, CustomCategory, PredefinedCategory
+from app.security import verify_token
+from app.database import sub_tiers
+
+router = APIRouter(
+    prefix="/categories",
+    tags=["Categories"]
+)
+
+
+@router.post("/create/custom_category/", response_model=dict)
+def create_custom_category(category: CategoryCreate, db: Session = Depends(get_db), token_data: dict = Depends(verify_token)):
+    category_db = db.query(CustomCategory)
+    category_exists = category_db.filter(CustomCategory.name == category.name).first()
+
+    if category_exists:
+        raise HTTPException(status_code=409, detail="Category already exists")
+    
+    db_user = db.query(User).filter_by(id=token_data['user_id']).first()
+    number_of = category_db.filter_by(user_id=token_data['user_id']).count()
+
+    if number_of >= sub_tiers.get(db_user.subscription_tier, 0):
+        raise HTTPException(status_code=403, detail="Max number of categories reached. Consider upgrading to a higher tier for more customization!")
+
+    create_category = CustomCategory(
+        user_id = token_data['user_id'],
+        name = category.name,
+        description = category.description
+    )
+
+    db.add(create_category)
+    db.commit()
+    
+    return {"message": f"'{category.name}' with description '{category.description}' successfully created!"}
+
+
+@router.post("/create/predefined_category/", response_model=dict)
+def create_predefined_category(category: CategoryCreate, db: Session = Depends(get_db), token_data: dict = Depends(verify_token)):
+
+    check_admin(db, token_data)
+
+    # We need to check if the user already has a category with that name
+    # If the category name is in predefined we set category_type == "predefine"
+    category_entry = db.query(PredefinedCategory).filter(PredefinedCategory.name == category.name).first()
+
+    if category_entry:
+        raise HTTPException(status_code=403, detail="Category already exists.")
+    
+    create_predefined = PredefinedCategory(
+        name = category.name,
+        description = category.description
+    )
+
+    db.add(create_predefined)
+    db.commit()
+
+    return {"message": f"Created {category.name} with description: {category.description}"}
+
+
+
+@router.delete("/delete/custom_category", response_model=dict)
+def delete_category(category: CategoryGeneric, db: Session = Depends(get_db), token_data: dict = Depends(verify_token)):
+    # Find all categories the user has, if category_name exists, delete it, otherwise raise HTTPException NOT FOUND
+    user_categories = db.query(CustomCategory).filter(CustomCategory.user_id == token_data['user_id']).filter(CustomCategory.name == category.name).first()
+    
+    if not user_categories:
+        raise HTTPException(status_code=404, detail=f"No category with name '{category.name}' found.")
+
+
+    db.delete(user_categories)
+    db.commit()
+
+    return {"message": f"'{category.name}' succesfully deleted."}
+
+
+
+@router.delete("/delete/predefined_category", response_model=dict)
+def delete_category(category: CategoryGeneric, db: Session = Depends(get_db), token_data: dict = Depends(verify_token)):
+
+    check_admin(db, token_data)
+
+    predefined_category = db.query(PredefinedCategory).filter(category.name == PredefinedCategory.name).first()
+
+    if not predefined_category:
+        raise HTTPException(status_code=404, detail=f"'{category.name}' not found.")
+
+    db.delete(predefined_category)
+    db.commit()
+
+    return {"message": f"'{category.name}' successfully delete."}
+
+
+@router.get("/read/custom_categories")
+def read_custom_categories(db: Session= Depends(get_db), token_data: dict= Depends(verify_token)):
+    
+    user_categories = db.query(CustomCategory).filter(CustomCategory.user_id == token_data['user_id']).all()
+
+    if len(user_categories) <= 0:
+        return "No categories found."
+
+    return user_categories
+
+
+@router.get("/read/predefined_categories")
+def read_custom_categories(db: Session= Depends(get_db), token_data: dict= Depends(verify_token)):
+    check_admin(db, token_data)
+    
+    predefined_categories = db.query(PredefinedCategory).all()
+
+    return predefined_categories

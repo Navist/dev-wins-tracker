@@ -25,7 +25,7 @@ router = APIRouter(
 
 
 # Creates the API call for creating an actual user. Also responds with the information they put in?
-@router.post("/", response_model=UserResponse)
+@router.post("/create", response_model=UserResponse)
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
     db_user = User(
         username=user.username, 
@@ -46,13 +46,15 @@ def login(user: OAuth2PasswordRequestForm = Depends(), db: Session= Depends(get_
         raise HTTPException(status_code=400, detail="Invalid email or password")
 
     try:
-        jwt.decode(db_user.access_token, SECRET_KEY, algorithms=[ALGORITHM])
-        jwt.decode(db_user.refresh_token, SECRET_KEY, algorithms=[ALGORITHM])
-        return {"access_token": db_user.access_token, "refresh_token": db_user.refresh_token, "token_type": "bearer"}
+        if not db_user.access_token == 'revoked':
+            jwt.decode(db_user.access_token, SECRET_KEY, algorithms=[ALGORITHM])
+            jwt.decode(db_user.refresh_token, SECRET_KEY, algorithms=[ALGORITHM])
+            return {"access_token": db_user.access_token, "refresh_token": db_user.refresh_token, "token_type": "bearer"}
     except jwt.ExpiredSignatureError:
         pass
 
     access_token = create_access_token(data={"sub": db_user.email, "user_id": db_user.id})
+    print(access_token)
     refresh_token = create_refresh_token(db_user.id)
 
 
@@ -100,7 +102,7 @@ def refresh_token(db: Session = Depends(get_db), token_data: dict = Depends(veri
 
 
 # Queries the current database for all user information
-@router.get("/", response_model=list[UserResponse])
+@router.get("/get/all", response_model=list[UserResponse])
 def get_users(db: Session = Depends(get_db), token_data: dict = Depends(verify_token)):
     check_admin(db, token_data)
 
@@ -115,7 +117,7 @@ def update_user(
     db: Session = Depends(get_db),
     token_data: dict = Depends(verify_token)
 ):
-    
+
     if token_data["user_id"] != user_id:
         raise HTTPException(status_code=403, detail="Access Denied.")
 
@@ -157,20 +159,22 @@ def update_password(
     return {"message": "Password updated successfully."}
 
 
-@router.delete("/{user_id}", response_model=dict)
+@router.delete("/delete")
 def delete_user(
-    user_id: int, 
+    username: str, 
     db: Session = Depends(get_db),
     token_data: dict = Depends(verify_token)
 ):
-    
-    if token_data["user_id"] != user_id:
-        raise HTTPException(status_code=403, detail="Access Denied.")
 
-    db_user = check_db_user(db, token_data)
+    db_user = db.query(User).filter_by(username=username).first()
 
     if not db_user:
-        return db_user
+        raise HTTPException(status_code=404, detail="User not found.")
+
+    if token_data["sub"] != db_user.email:
+        check_admin(db, token_data)
+        # raise HTTPException(status_code=403, detail="Access Denied.")
+
     
     db.delete(db_user)
     db.commit()
