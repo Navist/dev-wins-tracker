@@ -1,7 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 from app.checks import check_admin, check_db_user, get_db
 from sqlalchemy.orm import Session
-from app.schemas import CategoryCreate, CategoryResponse, CategoryGeneric
+from sqlalchemy.sql.expression import exists
+from app.schemas import CategoryCreate, CategoryResponse, CategoryGeneric, CategoryUpdate
 from app.models import User, CustomCategory, PredefinedCategory
 from app.security import verify_token
 from app.database import sub_tiers
@@ -112,3 +113,44 @@ def read_custom_categories(db: Session= Depends(get_db), token_data: dict= Depen
     predefined_categories = db.query(PredefinedCategory).all()
 
     return predefined_categories
+
+
+@router.put("/update")
+def update_category(category: CategoryUpdate, db: Session = Depends(get_db), token_data: dict = Depends(verify_token)):
+
+    # Take a user input and adjust the category name if it is their category to alter.
+    # Needs to update all existing win entries to that new category.
+    db_predef = db.query(PredefinedCategory).where(PredefinedCategory.name == category.name).first()
+
+    # Admins should have the ability to edit user categories?
+    db_custom = db.query(CustomCategory).filter(CustomCategory.name == category.name, CustomCategory.user_id == token_data['user_id']).first()
+
+    db_new_custom = db.query(exists().where(
+        (CustomCategory.name == category.newname) & 
+        (CustomCategory.user_id == token_data['user_id'])
+        )
+        ).scalar()
+    db_new_predef = db.query(exists().where(
+        PredefinedCategory.name == category.newname)
+        ).scalar()
+
+    if db_new_custom or db_new_predef:
+        raise HTTPException(status_code=409, 
+                            detail=f"Category '{category.newname}' already exists.")
+
+    if not db_predef and not db_custom:
+        raise HTTPException(status_code=404, 
+                            detail=f"Category '{category.name}' not found.")
+    
+
+    if db_predef:
+        check_admin(db, token_data)
+        db_predef.name = category.newname
+
+    if db_custom:
+        
+        db_custom.name = category.newname
+
+    db.commit()
+
+    return {"message": f"Updated {category.name} to {category.newname} successfully"}

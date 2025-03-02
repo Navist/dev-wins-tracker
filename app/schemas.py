@@ -46,6 +46,10 @@ class CategoryCreate(BaseModel):
 class CategoryGeneric(BaseModel):
     name: str
 
+class CategoryUpdate(BaseModel):
+    name: str
+    newname: str
+
 class CategoryResponse(BaseModel):
     pass
 
