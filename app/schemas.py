@@ -53,6 +53,12 @@ class WinCreate(BaseModel):
     category: str
     description: str
 
+class WinUpdate(BaseModel):
+    id: int
+    category: str
+    description: str
+
+
 class WinDelete(BaseModel):
     id: int
 
@@ -65,3 +71,27 @@ class WinDeleteResponse(BaseModel):
 class WinResponse(BaseModel):
     category: str
     description: str
+
+
+class SubCreate(BaseModel):
+    user_id: int
+    subscription_tier: str
+
+
+class SubUpdate(BaseModel):
+    user_id: int
+    subscription_tier: str
+
+class SubDelete(BaseModel):
+    user_id: int
+
+
+# Admins can upgrade a person
+class SubUpgrade(BaseModel):
+    user_id: int
+    subscription_tier: str
+
+
+class SubResponse(BaseModel):
+    user_id: int
+    subscription_tier: str
