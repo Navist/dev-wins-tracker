@@ -1,7 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 from app.checks import check_admin, check_db_user, get_db
 from sqlalchemy.orm import Session
-from app.schemas import WinResponse, WinCreate, WinDelete, WinDeleteResponse
+from sqlalchemy.sql.expression import select
+from app.schemas import WinResponse, WinCreate, WinDelete, WinDeleteResponse, WinUpdate
 from app.models import Win, CustomCategory, PredefinedCategory
 from app.security import verify_token
 
@@ -66,8 +67,37 @@ def read_win(win: WinResponse, db: Session = Depends(get_db), token_data: dict=D
     return specific_category
 
 @router.post("/update/")
-def update_win(db: Session = Depends(get_db), token_data: dict=Depends(verify_token)):
-    pass
+def update_win(win: WinUpdate, db: Session = Depends(get_db), token_data: dict=Depends(verify_token)):
+    
+    
+    predef_cat_exists = db.query(PredefinedCategory).where(PredefinedCategory.name == win.category).first()
+    print(predef_cat_exists)
+
+    custom_cat_exists = db.query(CustomCategory).where(CustomCategory.name == win.category).first()
+
+    print(custom_cat_exists)
+
+    if not predef_cat_exists and not custom_cat_exists:
+        raise HTTPException(status_code=404, detail="Category not found.")
+
+    user_wins = db.query(Win).filter(Win.user_id == token_data['user_id'])
+
+    specific_win = user_wins.filter_by(id=win.id).first()
+
+    cur_category = specific_win.category
+    cur_description = specific_win.description
+
+    if not specific_win:
+        raise HTTPException(status_code=404, detail="No wins with that id found.")
+
+    # Needs a check for whether or not the category being pushed exists.
+    specific_win.category = win.category
+    specific_win.description = win.description
+    # Choose variable and alter it before commit to update
+
+    db.commit()
+
+    return {'message': f"Your win has been updated! From: '{cur_category}':'{cur_description}' to '{win.category}':'{win.description}'"}
 
 @router.delete("/delete/", response_model=WinDeleteResponse)
 def delete_win(win: WinDelete, db: Session = Depends(get_db), token_data: dict=Depends(verify_token)):
