@@ -46,7 +46,7 @@ def login(user: OAuth2PasswordRequestForm = Depends(), db: Session= Depends(get_
         raise HTTPException(status_code=400, detail="Invalid email or password")
 
     try:
-        if not db_user.access_token == 'revoked':
+        if not db_user.access_token == 'revoked' and db_user.access_token != None:
             jwt.decode(db_user.access_token, SECRET_KEY, algorithms=[ALGORITHM])
             jwt.decode(db_user.refresh_token, SECRET_KEY, algorithms=[ALGORITHM])
             return {"access_token": db_user.access_token, "refresh_token": db_user.refresh_token, "token_type": "bearer"}
@@ -54,7 +54,6 @@ def login(user: OAuth2PasswordRequestForm = Depends(), db: Session= Depends(get_
         pass
 
     access_token = create_access_token(data={"sub": db_user.email, "user_id": db_user.id})
-    print(access_token)
     refresh_token = create_refresh_token(db_user.id)
 
 
