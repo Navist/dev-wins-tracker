@@ -10,6 +10,9 @@ class UserCreate(BaseModel):
         description="Password must be at least 8 characters long."
         )
 
+class UserLogin(BaseModel):
+    email: EmailStr
+    password: str
 
 class UserUpdate(BaseModel):
     username: Optional[str] = None
@@ -73,6 +76,7 @@ class WinDeleteResponse(BaseModel):
 
 
 class WinResponse(BaseModel):
+    id: int
     category: str
     description: str
 
