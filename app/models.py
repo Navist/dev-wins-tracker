@@ -64,6 +64,7 @@ class Win(Base):
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     category = Column(String, nullable=False)
     description = Column(Text, nullable=False)
+    created_at = Column(DateTime, nullable=False, default=func.now(), server_default=func.now())
 
     user = relationship("User", back_populates="user_wins")
     
