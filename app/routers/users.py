@@ -39,8 +39,8 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
 
 
 @router.post("/login/")
-def login(user: OAuth2PasswordRequestForm = Depends(), db: Session= Depends(get_db)):
-    db_user = db.query(User).filter(User.email == user.username).first()
+def login(user: UserLogin, db: Session= Depends(get_db)):
+    db_user = db.query(User).filter(User.email == user.email).first()
 
     if not db_user or not verify_password(user.password, db_user.password_hash):
         raise HTTPException(status_code=400, detail="Invalid email or password")
@@ -49,7 +49,7 @@ def login(user: OAuth2PasswordRequestForm = Depends(), db: Session= Depends(get_
         if not db_user.access_token == 'revoked' and db_user.access_token != None:
             jwt.decode(db_user.access_token, SECRET_KEY, algorithms=[ALGORITHM])
             jwt.decode(db_user.refresh_token, SECRET_KEY, algorithms=[ALGORITHM])
-            return {"access_token": db_user.access_token, "refresh_token": db_user.refresh_token, "token_type": "bearer"}
+            return db_user #{"access_token": db_user.access_token, "refresh_token": db_user.refresh_token, "token_type": "bearer"}
     except jwt.ExpiredSignatureError:
         pass
 
@@ -63,7 +63,7 @@ def login(user: OAuth2PasswordRequestForm = Depends(), db: Session= Depends(get_
     db.commit()
     db.refresh(db_user)
 
-    return {"access_token": access_token, "refresh_token": refresh_token, "token_type": "bearer"}
+    return db_user #{"access_token": access_token, "refresh_token": refresh_token, "token_type": "bearer"}
 
 
 @router.post("/logout/")
@@ -107,9 +107,15 @@ def get_users(db: Session = Depends(get_db), token_data: dict = Depends(verify_t
 
     return db.query(User).all()
 
+@router.get("/get/")
+def get_user(db: Session = Depends(get_db), token_data: dict = Depends(verify_token)):
+    db_user = check_db_user(db, token_data)
+
+    return db_user
+
 
 # Updating an existing user. If there is no existing user, raise 404 error stating User not found
-@router.put("/{user_id}", response_model=UserResponse)
+@router.put("/{user_id}/", response_model=UserResponse)
 def update_user(
     user_id: int, 
     updated_user: UserUpdate, 
@@ -158,7 +164,7 @@ def update_password(
     return {"message": "Password updated successfully."}
 
 
-@router.delete("/delete")
+@router.delete("/delete/")
 def delete_user(
     username: str, 
     db: Session = Depends(get_db),
@@ -180,7 +186,7 @@ def delete_user(
     return {"message": "User deleted successfully"}
 
 
-@router.put("/{user_id}/promote", response_model=dict)
+@router.put("/{user_id}/promote/", response_model=dict)
 def promote_user(
     user_id: int, 
     db: Session = Depends(get_db),
