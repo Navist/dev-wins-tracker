@@ -10,7 +10,7 @@
 
 ### **🔹 `/categories/` (Development Categories)**
 
--   [ ] **Update**: Allow users to edit their own wins (title, description, category).
+-   [✅] **Update**: Allow users to edit their own wins (title, description, category).
 
 ### **🔹 `/subscribers/` (Subscription System)**
 
@@ -25,7 +25,7 @@
 -   [ ] Add **Swagger/OpenAPI Docs** (`/docs` in FastAPI).
 -   [ ] Ensure **consistent API responses** (`{"message": "...", "data": {...}}`).
 -   [ ] Write basic **unit tests** for authentication & CRUD operations.
--   [ ] Validate endpoints in **Postman** or FastAPI’s built-in test client.
+-   [✅] Validate endpoints in **Postman** or FastAPI’s built-in test client.
 
 ---
 
@@ -39,9 +39,9 @@
 
 ## **🎯 Stretch Goals (If Time Allows)**
 
--   [ ] Implement **refresh tokens** for JWT authentication.
+-   [✅] Implement **refresh tokens** for JWT authentication.
 -   [ ] Add **pagination or filtering** for `/wins/` retrieval.
--   [ ] Set up **role-based access control (RBAC)** for admin functions.
+-   [✅] Set up **role-based access control (RBAC)** for admin functions.
 
 ---
 
