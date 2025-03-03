@@ -1,8 +1,13 @@
 from fastapi import FastAPI
 from app.routers import users, wins, categories, subscribers
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
+origins = [
+    "http://localhost:3000",
+    "https://editforpublicdomainlater.com",
+]
 
 app.include_router(users.router)
 app.include_router(categories.router)
@@ -10,8 +15,14 @@ app.include_router(subscribers.router)
 app.include_router(wins.router)
 
 
-
-# Displays how it's possible to add FastAPI functions inside the main py but it's easier and more modular to do it inside their own router files.
-# @app.get("/")
-# async def root():
-#     return {"message": "Welcome to Dev Wins Tracker API 🚀"}
+app.add_middleware(
+    CORSMiddleware,
+    # Specifying what URLs will be allowed to make requests
+    allow_origins = origins,
+    # Allows the passing of credentials, such as OAuth
+    allow_credentials = True,
+    # What methods are going to be allow: get, post, update, delete...
+    allow_methods = ["*"],
+    # We only accept one kind of header now so might change this later to add a minor layer of security
+    allow_headers=["*"],
+)
