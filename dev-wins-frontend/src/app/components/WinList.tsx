@@ -2,30 +2,29 @@
 import { useEffect, useState } from "react";
 import { api } from "../utils/api";
 import WinCard from "../components/WinCard";
+import { useRouter } from "next/navigation";
 
 interface Win {
     id: number;
+    title: string;
     category: string;
     description: string;
 }
 
-export default function WinList() {
-    const [wins, setWins] = useState<Win[]>([]);
-    const [loading, setLoading] = useState(true);
+interface WinListProps {
+    wins: Win[];
+    loading: boolean;
+    onDelete: (id: number) => Promise<void>;
+    onEdit: (win: Win) => void;
+}
 
-    useEffect(() => {
-        const fetchWins = async () => {
-            try {
-                const response = await api.get("/wins/read/all");
-                setWins(response.data);
-            } catch (error) {
-                console.error("Error fetching wins:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchWins();
-    }, []);
+export default function WinList({
+    wins,
+    loading,
+    onDelete,
+    onEdit,
+}: WinListProps) {
+    const router = useRouter();
 
     if (loading) {
         return (
@@ -51,7 +50,14 @@ export default function WinList() {
                     No wins yet. Start tracking your progress!
                 </p>
             ) : (
-                wins.map((win) => <WinCard key={win.id} {...win} />)
+                wins.map((win) => (
+                    <WinCard
+                        key={win.id}
+                        {...win}
+                        onDelete={onDelete}
+                        onEdit={onEdit}
+                    />
+                ))
             )}
         </div>
     );
