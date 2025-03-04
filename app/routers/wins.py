@@ -35,6 +35,7 @@ def create_win(win: WinCreate, db: Session = Depends(get_db), token_data: dict =
 
     db_win = Win(
         user_id=token_data["user_id"],
+        title=win.title,
         category=win.category,
         description=win.description
     )
@@ -66,16 +67,13 @@ def read_win(win: WinResponse, db: Session = Depends(get_db), token_data: dict=D
 
     return specific_category
 
-@router.post("/update/")
+@router.put("/update/", response_model=WinResponse)
 def update_win(win: WinUpdate, db: Session = Depends(get_db), token_data: dict=Depends(verify_token)):
     
     
     predef_cat_exists = db.query(PredefinedCategory).where(PredefinedCategory.name == win.category).first()
-    print(predef_cat_exists)
 
     custom_cat_exists = db.query(CustomCategory).where(CustomCategory.name == win.category).first()
-
-    print(custom_cat_exists)
 
     if not predef_cat_exists and not custom_cat_exists:
         raise HTTPException(status_code=404, detail="Category not found.")
@@ -84,6 +82,7 @@ def update_win(win: WinUpdate, db: Session = Depends(get_db), token_data: dict=D
 
     specific_win = user_wins.filter_by(id=win.id).first()
 
+    cur_title = specific_win.title
     cur_category = specific_win.category
     cur_description = specific_win.description
 
@@ -91,23 +90,25 @@ def update_win(win: WinUpdate, db: Session = Depends(get_db), token_data: dict=D
         raise HTTPException(status_code=404, detail="No wins with that id found.")
 
     # Needs a check for whether or not the category being pushed exists.
+    specific_win.title = win.title
     specific_win.category = win.category
     specific_win.description = win.description
     # Choose variable and alter it before commit to update
 
     db.commit()
 
-    return {'message': f"Your win has been updated! From: '{cur_category}':'{cur_description}' to '{win.category}':'{win.description}'"}
+    return specific_win
+    # return {'message': f"Your win has been updated! From: '{cur_category}' '{cur_title}':'{cur_description}' to '{win.category}' '{win.title}':'{win.description}'"}
 
-@router.delete("/delete/", response_model=WinDeleteResponse)
-def delete_win(win: WinDelete, db: Session = Depends(get_db), token_data: dict=Depends(verify_token)):
-    
+
+@router.delete("/delete/{win_id}", response_model=WinDeleteResponse)
+def delete_win(win_id: int, db: Session = Depends(get_db), token_data: dict = Depends(verify_token)):
     user_wins = db.query(Win).filter(Win.user_id == token_data['user_id'])
 
-    specific_win = user_wins.filter_by(id=win.id).first()
+    specific_win = user_wins.filter_by(id=win_id).first()
 
     if not specific_win:
-        raise HTTPException(status_code=404, detail="No wins with that id found.")
+        raise HTTPException(status_code=404, detail="No wins with that ID found.")
 
     response_data = {
         "category": specific_win.category,
@@ -119,4 +120,5 @@ def delete_win(win: WinDelete, db: Session = Depends(get_db), token_data: dict=D
     db.commit()
 
     return response_data
+
 
