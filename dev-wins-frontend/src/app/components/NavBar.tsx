@@ -18,7 +18,7 @@ export default function NavBar() {
                 onClick={() => router.push("/categories")}
                 className="px-4 py-2 bg-green-500 rounded"
             >
-                Manage Cateogories
+                Manage Categories
             </button>
             <button
                 onClick={() => router.push("/subscriptions")}
