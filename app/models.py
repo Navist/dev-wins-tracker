@@ -62,6 +62,7 @@ class Win(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    title = Column(String, nullable=False, server_default="Old_Data")
     category = Column(String, nullable=False)
     description = Column(Text, nullable=False)
     created_at = Column(DateTime, nullable=False, default=func.now(), server_default=func.now())

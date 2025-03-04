@@ -57,11 +57,13 @@ class CategoryResponse(BaseModel):
     pass
 
 class WinCreate(BaseModel):
+    title: str = Field(..., min_length=4, max_length=60)
     category: str
     description: str
 
 class WinUpdate(BaseModel):
     id: int
+    title: str = Field(..., min_length=4, max_length=60)
     category: str
     description: str
 
@@ -77,6 +79,7 @@ class WinDeleteResponse(BaseModel):
 
 class WinResponse(BaseModel):
     id: int
+    title: str
     category: str
     description: str
 
