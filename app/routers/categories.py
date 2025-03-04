@@ -115,6 +115,18 @@ def read_custom_categories(db: Session= Depends(get_db), token_data: dict= Depen
     return predefined_categories
 
 
+@router.get("/read/all/")
+def read_all_categories(db: Session = Depends(get_db), token_data: dict= Depends(verify_token)):
+
+    user_categories = db.query(CustomCategory).where(CustomCategory.user_id == token_data['user_id']).all()
+
+    predefined_categories = db.query(PredefinedCategory).all()
+
+    all_categories = user_categories + predefined_categories
+
+    return all_categories
+    
+
 @router.put("/update")
 def update_category(category: CategoryUpdate, db: Session = Depends(get_db), token_data: dict = Depends(verify_token)):
 
