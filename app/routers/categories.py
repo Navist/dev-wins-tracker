@@ -63,19 +63,19 @@ def create_predefined_category(category: CategoryCreate, db: Session = Depends(g
 
 
 
-@router.delete("/delete/custom_category", response_model=dict)
-def delete_category(category: CategoryGeneric, db: Session = Depends(get_db), token_data: dict = Depends(verify_token)):
+@router.delete("/delete/custom_category/{category_id}", response_model=dict)
+def delete_category(category_id: int, db: Session = Depends(get_db), token_data: dict = Depends(verify_token)):
     # Find all categories the user has, if category_name exists, delete it, otherwise raise HTTPException NOT FOUND
-    user_categories = db.query(CustomCategory).filter(CustomCategory.user_id == token_data['user_id']).filter(CustomCategory.name == category.name).first()
+    user_categories = db.query(CustomCategory).filter(CustomCategory.user_id == token_data['user_id']).filter(CustomCategory.id == category_id).first()
     
     if not user_categories:
-        raise HTTPException(status_code=404, detail=f"No category with name '{category.name}' found.")
+        raise HTTPException(status_code=404, detail=f"No category with that id found.")
 
 
     db.delete(user_categories)
     db.commit()
 
-    return {"message": f"'{category.name}' succesfully deleted."}
+    return {"message": f"Succesfully deleted."}
 
 
 
