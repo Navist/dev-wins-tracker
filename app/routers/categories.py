@@ -101,7 +101,7 @@ def read_custom_categories(db: Session= Depends(get_db), token_data: dict= Depen
     user_categories = db.query(CustomCategory).filter(CustomCategory.user_id == token_data['user_id']).all()
 
     if len(user_categories) <= 0:
-        return "No categories found."
+        return {"message": "No categories found."}
 
     return user_categories
 
