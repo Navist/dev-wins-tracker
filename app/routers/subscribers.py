@@ -17,20 +17,10 @@ router = APIRouter(
 
 
 @router.get("/read/")
-async def get_subscription(target: SubResponse, db: Session = Depends(get_db), token_data: dict = Depends(verify_token)):
+async def get_subscription(db: Session = Depends(get_db), token_data: dict = Depends(verify_token)):
     sub_status = None
-    
-    if target.user_id == 'all':
-        check_admin(db, token_data)
-        sub_status = db.query(Subscriber).all()
-    
-    if target.user_id != token_data['user_id']:
-        raise HTTPException(status_code=403, detail="Not the owner of this account")
-    else:
-        sub_status = db.query(Subscriber).where(Subscriber.user_id == token_data['user_id']).first()
-
-    return {"message": f"Current subscription status for {token_data['sub']} is {sub_status.subscription_tier}"}
-
+    sub_status = db.query(Subscriber).where(Subscriber.user_id == token_data['user_id']).first()
+    return sub_status
 
 # Assume a sub entry already exists for all users
 @router.put("/create_sub")
