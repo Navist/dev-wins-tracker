@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
-from app.models import User
+from app.models import User, Subscriber
 from app.checks import check_admin, check_db_user, get_db
 from app.schemas import UserCreate, UserResponse, UserUpdate, UserLogin, UserPasswordUpdate
 from app.security import (
@@ -25,16 +25,26 @@ router = APIRouter(
 
 
 # Creates the API call for creating an actual user. Also responds with the information they put in?
-@router.post("/create", response_model=UserResponse)
+@router.post("/create/", response_model=UserResponse)
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
     db_user = User(
         username=user.username, 
         email=user.email, 
         password_hash=hash_password(user.password)
         )
+    
+
+
     db.add(db_user)
-    db.commit()
+    db.commit()    
     db.refresh(db_user)
+    sub_status = Subscriber(
+        user_id = db_user.id
+    )
+
+    db.add(sub_status)
+    db.commit()
+
     return db_user
 
 
