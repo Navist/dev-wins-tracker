@@ -36,7 +36,6 @@ export default function DashboardPage() {
 
     return (
         <div className="min-h-screen">
-            <NavBar />
             <h1 className="text-3xl font-bold p-6">
                 Welcome to Your Dashboard {user?.username || "User"}!
             </h1>

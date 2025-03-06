@@ -59,8 +59,10 @@ const CategoriesPage = () => {
 
     return (
         <div>
-            <NavBar />
             <div className="flex flex-col items-center min-h-screen p-6">
+                <div className="mb-5 font-bold text-center text-4xl">
+                    Manage Categories
+                </div>
                 {categories.length === 0 ? (
                     <p className="text-gray-400 text-lg">
                         No categories found. Create one!

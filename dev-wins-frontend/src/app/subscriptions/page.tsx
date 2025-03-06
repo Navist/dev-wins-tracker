@@ -37,7 +37,6 @@ const SubscribersPage = () => {
 
     return (
         <div>
-            <NavBar />
             <div className="flex flex-col items-center min-h-screen p-6">
                 {error && <p className="text-red-400">{error}</p>}
 

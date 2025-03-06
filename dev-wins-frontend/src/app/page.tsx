@@ -5,7 +5,6 @@ import NavBar from "./components/NavBar";
 const page = () => {
     return (
         <main>
-            <NavBar />
             <Link href="/wins">Wins</Link>
         </main>
     );

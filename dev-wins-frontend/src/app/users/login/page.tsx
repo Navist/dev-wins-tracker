@@ -54,7 +54,7 @@ export default function LoginPage() {
                 />
                 <button
                     type="submit"
-                    className="p-2 bg-blue-500 text-white rounded"
+                    className="p-2 bg-blue-500 text-white rounded hover:bg-blue-800"
                 >
                     Login
                 </button>

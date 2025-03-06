@@ -81,7 +81,6 @@ export default function WinsPage() {
 
     return (
         <div>
-            <NavBar />
             <div className="flex flex-col items-center min-h-screen p-6">
                 <h1 className="text-3xl font-bold mb-6">Your Wins 🏆</h1>
                 <WinList
