@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from app.checks import check_admin, check_db_user, get_db
 from sqlalchemy.orm import Session
 from sqlalchemy.sql.expression import select
-from app.schemas import WinResponse, WinCreate, WinDelete, WinDeleteResponse, WinUpdate
+from app.schemas import WinResponse, WinDelete, WinDeleteResponse, WinUpdate, WinCreateSQL, WinCategoryPost 
 from app.models import Win, CustomCategory, PredefinedCategory
 from app.security import verify_token
 
@@ -20,8 +20,8 @@ router = APIRouter(
 #     db_user = check_db_user(db, token_data)
 
 
-@router.post("/create/", response_model=WinCreate)
-def create_win(win: WinCreate, db: Session = Depends(get_db), token_data: dict = Depends(verify_token)):
+@router.post("/create/", response_model=WinCreateSQL)
+def create_win(win: WinCategoryPost, db: Session = Depends(get_db), token_data: dict = Depends(verify_token)):
     # Should check to see if user already has a category description so we don't create duplicates
     # This will be called to create a new win when the user wants to add one but the categories will be pulled from both predefined sql table and custom categories.
     # An option on the drop down menu will include "Create New Category" or similar for creating custom.
