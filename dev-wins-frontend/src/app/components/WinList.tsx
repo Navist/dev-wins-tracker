@@ -1,6 +1,4 @@
 "use client";
-import { useEffect, useState } from "react";
-import { api } from "../utils/api";
 import WinCard from "../components/WinCard";
 import { useRouter } from "next/navigation";
 
