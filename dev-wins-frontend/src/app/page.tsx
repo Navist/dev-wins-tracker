@@ -1,13 +1,7 @@
-import Link from "next/link";
 import React from "react";
-import NavBar from "./components/NavBar";
 
-const page = () => {
-    return (
-        <main>
-            <Link href="/wins">Wins</Link>
-        </main>
-    );
+const HomePage = () => {
+    return <div>HomePage</div>;
 };
 
-export default page;
+export default HomePage;
