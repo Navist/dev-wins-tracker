@@ -75,7 +75,7 @@ def delete_category(category_id: int, db: Session = Depends(get_db), token_data:
     db.delete(user_categories)
     db.commit()
 
-    return {"message": f"Succesfully deleted."}
+    return {"message": f"Category successfully deleted."}
 
 
 
@@ -101,7 +101,7 @@ def read_custom_categories(db: Session= Depends(get_db), token_data: dict= Depen
     user_categories = db.query(CustomCategory).filter(CustomCategory.user_id == token_data['user_id']).all()
 
     if len(user_categories) <= 0:
-        return {"message": "No categories found."}
+        raise HTTPException(status_code=404, detail="No categories found.")
 
     return user_categories
 
@@ -117,10 +117,12 @@ def read_custom_categories(db: Session= Depends(get_db), token_data: dict= Depen
 
 @router.get("/read/all/")
 def read_all_categories(db: Session = Depends(get_db), token_data: dict= Depends(verify_token)):
-
     user_categories = db.query(CustomCategory).where(CustomCategory.user_id == token_data['user_id']).all()
 
     predefined_categories = db.query(PredefinedCategory).all()
+
+    # Union only works if they have the same number of columns
+    # all_categories = db.query(CustomCategory).filter(CustomCategory.user_id == token_data['user_id']).union_all(PredefinedCategory)
 
     all_categories = user_categories + predefined_categories
 
