@@ -22,8 +22,8 @@ export default function LoginPage() {
                 password,
             });
 
-            if (response.data.access_token) {
-                localStorage.setItem("token", response.data.access_token);
+            if (response.status === 200) {
+                console.log("User has a green light!");
                 router.push("/dashboard");
             }
         } catch (err) {
