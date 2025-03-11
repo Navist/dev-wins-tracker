@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Response
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from app.models import User, Subscriber
@@ -49,31 +49,41 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
 
 
 @router.post("/login/")
-def login(user: UserLogin, db: Session= Depends(get_db)):
+def login(user: UserLogin, response: Response, db: Session = Depends(get_db)):
     db_user = db.query(User).filter(User.email == user.email).first()
 
     if not db_user or not verify_password(user.password, db_user.password_hash):
         raise HTTPException(status_code=400, detail="Invalid email or password")
 
-    try:
-        if not db_user.access_token == 'revoked' and db_user.access_token != None:
-            jwt.decode(db_user.access_token, SECRET_KEY, algorithms=[ALGORITHM])
-            jwt.decode(db_user.refresh_token, SECRET_KEY, algorithms=[ALGORITHM])
-            return db_user #{"access_token": db_user.access_token, "refresh_token": db_user.refresh_token, "token_type": "bearer"}
-    except jwt.ExpiredSignatureError:
-        pass
-
     access_token = create_access_token(data={"sub": db_user.email, "user_id": db_user.id})
     refresh_token = create_refresh_token(db_user.id)
 
 
-    db_user.access_token=access_token
-    db_user.refresh_token=refresh_token
-
+    db_user.access_token = access_token
+    db_user.refresh_token = refresh_token
     db.commit()
     db.refresh(db_user)
 
-    return db_user #{"access_token": access_token, "refresh_token": refresh_token, "token_type": "bearer"}
+
+    response.set_cookie(
+        key="token",
+        value=access_token,
+        httponly=True,
+        secure=False,  # Change to `True` in production
+        samesite="Lax",
+        max_age=60 * 60 * 24 * 7,  # 7 days
+    )
+
+    response.set_cookie(
+        key="refresh_token",
+        value=refresh_token,
+        httponly=True,
+        secure=False,
+        samesite="Lax",
+        max_age=60 * 60 * 24 * 30,  # 30 days
+    )
+
+    return {"message": "Login successful"}
 
 
 @router.post("/logout/")
