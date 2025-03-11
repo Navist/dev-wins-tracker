@@ -22,17 +22,12 @@ export default function WinsPage() {
     const [selectedWin, setSelectedWin] = useState<Win | null>(null);
 
     useEffect(() => {
-        if (!isAuthenticated()) {
-            router.push("/users/login");
-            return;
-        }
-
         const fetchWins = async () => {
             try {
                 const response = await api.get("/wins/read/all");
                 setWins(response.data);
             } catch (error) {
-                router.push("/users/login");
+                // router.push("/users/login");
                 console.error("Error fetching wins:", error);
             } finally {
                 setLoading(false);
