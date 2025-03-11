@@ -1,7 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { isAuthenticated } from "../utils/auth";
-import NavBar from "../components/NavBar";
 import WinList from "../components/WinList";
 import { useEffect, useState } from "react";
 import { api } from "../utils/api";
