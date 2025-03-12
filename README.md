@@ -6,11 +6,12 @@ A web application designed to help developers track their small wins, boosting c
 ### **✅ Completed**
 - **User Authentication**: Sign in using GitHub, Google, or traditional email/password.
 - **Log Development Wins**: Track small achievements such as bug fixes, learning new concepts, and project milestones.
-- **Custom Categories**: Users can define up to a limited number of custom categories for their development wins.
+
 
 ### **⚙️ In Progress**
 - **Dashboard Overview**: Structuring the timeline for past accomplishments.
 - **Progress Insights**: Weekly/monthly summaries highlighting development progress.
+- **Custom Categories**: Users can define up to a limited number of custom categories for their development wins.
 
 ### **🔮 Planned Enhancements**
 - Auto-logging milestones from GitHub activity.
