@@ -1,10 +1,10 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { isAuthenticated } from "../utils/auth";
-import WinList from "../components/WinList";
+import { isAuthenticated } from "@/app/utils/auth";
+import WinList from "@/app/components/WinComponents/WinList";
 import { useEffect, useState } from "react";
-import { api } from "../utils/api";
-import WinModal from "../components/WinModal";
+import { api } from "@/app/utils/api";
+import WinModal from "@/app/components/WinComponents/WinModal";
 
 interface Win {
     id: number;
@@ -22,7 +22,7 @@ export default function WinsPage() {
 
     useEffect(() => {
         if (!isAuthenticated()) {
-            router.push("/users/login");
+            router.push("/login");
             return;
         }
 
@@ -31,7 +31,7 @@ export default function WinsPage() {
                 const response = await api.get("/wins/read/all");
                 setWins(response.data);
             } catch (error) {
-                router.push("/users/login");
+                router.push("/login");
                 console.error("Error fetching wins:", error);
             } finally {
                 setLoading(false);
@@ -95,7 +95,7 @@ export default function WinsPage() {
                         setIsModalOpen(true);
                     }}
                 >
-                    + Add Win
+                    Add Win
                 </button>
 
                 <WinModal

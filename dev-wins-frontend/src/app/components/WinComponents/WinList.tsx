@@ -1,7 +1,6 @@
 "use client";
-import WinCard from "../components/WinCard";
-import { useRouter } from "next/navigation";
-import LoadingTest from "../loadingtest/page";
+import WinCard from "@/app/components/WinComponents/WinCard";
+import LoadingTest from "@/app/loadingtest/page";
 
 interface Win {
     id: number;
@@ -23,8 +22,6 @@ export default function WinList({
     onDelete,
     onEdit,
 }: WinListProps) {
-    const router = useRouter();
-
     if (loading) {
         return <LoadingTest />;
     }

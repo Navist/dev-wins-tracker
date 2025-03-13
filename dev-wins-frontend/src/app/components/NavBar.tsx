@@ -32,11 +32,11 @@ export default function NavBar() {
                     View
                     <br /> Subscription
                 </button>
-                {pathname !== "/users/login" && (
+                {pathname !== "/login" && (
                     <button
                         onClick={() => {
                             logout();
-                            router.push("/users/login");
+                            router.push("/login");
                         }}
                         className="absolute bottom-10 left-3 px-4 py-2 bg-red-500 hover:bg-red-900 rounded w-32 cursor-pointer"
                     >

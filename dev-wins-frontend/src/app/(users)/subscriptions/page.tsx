@@ -1,8 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import NavBar from "../components/NavBar";
-import { api } from "../utils/api";
-import { isAuthenticated } from "../utils/auth";
+import { api } from "@/app/utils/api";
+import { isAuthenticated } from "@/app/utils/auth";
 import { useRouter } from "next/navigation";
 
 interface subStatus {
@@ -19,7 +18,7 @@ const SubscribersPage = () => {
 
     useEffect(() => {
         if (!isAuthenticated()) {
-            router.push("/users/login");
+            router.push("/login");
             return;
         }
 

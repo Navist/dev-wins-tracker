@@ -2,9 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { api } from "../utils/api";
-import { isAuthenticated, logout } from "../utils/auth";
-import NavBar from "../components/NavBar";
+import { api } from "@/app/utils/api";
+import { isAuthenticated, logout } from "@/app/utils/auth";
 
 export default function DashboardPage() {
     const [user, setUser] = useState<{
@@ -16,7 +15,7 @@ export default function DashboardPage() {
 
     useEffect(() => {
         if (!isAuthenticated()) {
-            router.push("/users/login");
+            router.push("/login");
             return;
         }
 
@@ -27,7 +26,7 @@ export default function DashboardPage() {
             } catch (error) {
                 console.error("Error fetching user:", error);
                 logout();
-                router.push("/users/login");
+                router.push("/login");
             }
         };
 

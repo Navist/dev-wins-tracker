@@ -93,7 +93,7 @@ def logout(db: Session = Depends(get_db), token_data: dict = Depends(verify_toke
 @router.post("/refresh/")
 def refresh_token(db: Session = Depends(get_db), token_data: dict = Depends(verify_token)):
     if token_data.get("type") != "refresh":
-        raise HTTPException(status_code=400, detail="Invalid refresh token")
+        raise HTTPException(status_code=400, detail="Authentication failed")
     
     db_user = check_db_user(db, token_data)
 

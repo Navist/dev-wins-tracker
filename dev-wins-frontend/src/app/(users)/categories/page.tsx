@@ -1,10 +1,12 @@
 "use client";
-import React from "react";
-import { api } from "../utils/api";
+import React, { useMemo } from "react";
+import { api } from "@/app/utils/api";
 import { useState, useEffect } from "react";
-import { isAuthenticated } from "../utils/auth";
+import { isAuthenticated } from "@/app/utils/auth";
 import { useRouter } from "next/navigation";
-import CatModal from "../components/CatModal";
+import CatModal from "@/app/components/CategoryComponents/CatModal";
+import CatList from "@/app/components/CategoryComponents/CatList";
+import { AxiosError } from "axios";
 
 interface Category {
     id: number;
@@ -17,14 +19,17 @@ export default function Categories() {
     const [categories, setCategories] = useState<Category[]>([]);
     const [selectedCat, setSelectedCat] = useState<Category | null>(null);
     const [modalState, setModalState] = useState(false);
+    const [loading, setLoading] = useState(true);
+
+    // Add logic for detecting number of categories and if max is reached (based on sub tier), modal for upgrade path
 
     useEffect(() => {
         if (!isAuthenticated()) {
-            router.push("/users/login");
+            router.push("/login");
             try {
-                localStorage.removeItem("token");
+                localStorage.removeItem("special_sauce");
             } catch (error) {
-                console.log("Error removing token", error);
+                console.log("Error removing special_sauce", error);
             } finally {
                 return;
             }
@@ -36,35 +41,44 @@ export default function Categories() {
                     "/categories/read/custom_categories"
                 );
                 setCategories(response.data);
-            } catch (error) {
+            } catch (error: unknown) {
                 console.log("Error fetching data:", error);
-                if (error.status === 401) {
+                if (
+                    error instanceof AxiosError &&
+                    error.response?.status === 401
+                ) {
                     // User Auth Invalid
                     try {
-                        localStorage.removeItem("token");
+                        localStorage.removeItem("special_sauce");
                     } catch (error) {
                         console.log(
-                            "Error removing token, doesn't exist?",
+                            "Error removing special_sauce, doesn't exist?",
                             error
                         );
                         return;
                     }
-                    router.push("/users/login");
+                    router.push("/login");
                     return;
                 }
+            } finally {
+                setLoading(false);
             }
-            // console.log(response.data);
         };
         fetchCategories();
     }, []);
 
+    const categoryCount = categories ? categories.length : null;
+
+    console.log("Count:", categoryCount);
+
+    // setCategoryLength(categories.length);
     const handleCategoryCreate = async (
         catData: Partial<Category>
     ): Promise<void> => {
         // Add modal handling
         try {
             if (catData.id) {
-                const response = await api.put("/categories/update", catData);
+                const response = await api.put("/categories/update/", catData);
                 setCategories((prevCats) =>
                     prevCats.map((cat) =>
                         cat.id === catData.id ? response.data : cat
@@ -75,6 +89,7 @@ export default function Categories() {
                     "/categories/create/custom_category/",
                     catData
                 );
+
                 setCategories((prevCats) => [...prevCats, response.data]);
             }
 
@@ -106,23 +121,24 @@ export default function Categories() {
 
     return (
         <div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {categories.map((cat) => (
-                    <div className="relative border p-4 rounded shadow-md group hover:bg-gray-700 hover:shadow-blue-300 transition duration-150">
-                        {cat.name}
-                        <br></br>
-                        {cat.description}
-                    </div>
-                ))}
-            </div>
-
-            <div className="flex flex-col items-center justify-center min-h-screen">
+            <div className="flex flex-col items-center min-h-screen p-6">
+                <h1 className="text-3xl font-bold mb-6">Your Categories</h1>
+                <CatList
+                    categories={categories}
+                    loading={loading}
+                    onDelete={handleDeleteCat}
+                    onEdit={handleEditCat}
+                />
                 <button
                     onClick={() => {
                         setSelectedCat(null);
                         setModalState(true);
                     }}
-                    className="border w-40 px-2 py-2 bg-green-800 rounded"
+                    className={
+                        !modalState
+                            ? "border w-40 px-2 py-2 bg-green-800 rounded mt-4"
+                            : "hidden"
+                    }
                 >
                     Add Category
                 </button>

@@ -23,7 +23,10 @@ export default function LoginPage() {
             });
 
             if (response.data.access_token) {
-                localStorage.setItem("token", response.data.access_token);
+                localStorage.setItem(
+                    "special_sauce",
+                    response.data.access_token
+                );
                 router.push("/dashboard");
             }
         } catch (err) {
