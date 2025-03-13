@@ -4,7 +4,8 @@ import { api } from "@/app/utils/api";
 import { useState, useEffect } from "react";
 import { isAuthenticated } from "@/app/utils/auth";
 import { useRouter } from "next/navigation";
-import CatModal from "@/app/components/CatModal";
+import CatModal from "@/app/components/CategoryComponents/CatModal";
+import CatList from "@/app/components/CategoryComponents/CatList";
 import { AxiosError } from "axios";
 
 interface Category {
@@ -18,12 +19,13 @@ export default function Categories() {
     const [categories, setCategories] = useState<Category[]>([]);
     const [selectedCat, setSelectedCat] = useState<Category | null>(null);
     const [modalState, setModalState] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     // Add logic for detecting number of categories and if max is reached (based on sub tier), modal for upgrade path
 
     useEffect(() => {
         if (!isAuthenticated()) {
-            router.push("/users/login");
+            router.push("/login");
             try {
                 localStorage.removeItem("special_sauce");
             } catch (error) {
@@ -55,9 +57,11 @@ export default function Categories() {
                         );
                         return;
                     }
-                    router.push("/users/login");
+                    router.push("/login");
                     return;
                 }
+            } finally {
+                setLoading(false);
             }
         };
         fetchCategories();
@@ -117,17 +121,14 @@ export default function Categories() {
 
     return (
         <div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {categories.map((cat) => (
-                    <div className="relative border p-4 rounded shadow-md group hover:bg-gray-700 hover:shadow-blue-300 transition duration-150">
-                        {cat.name}
-                        <br></br>
-                        {cat.description}
-                    </div>
-                ))}
-            </div>
-
-            <div className="flex flex-col items-center justify-center min-h-screen">
+            <div className="flex flex-col items-center min-h-screen p-6">
+                <h1 className="text-3xl font-bold mb-6">Your Categories</h1>
+                <CatList
+                    categories={categories}
+                    loading={loading}
+                    onDelete={handleDeleteCat}
+                    onEdit={handleEditCat}
+                />
                 <button
                     onClick={() => {
                         setSelectedCat(null);
@@ -135,7 +136,7 @@ export default function Categories() {
                     }}
                     className={
                         !modalState
-                            ? "border w-40 px-2 py-2 bg-green-800 rounded"
+                            ? "border w-40 px-2 py-2 bg-green-800 rounded mt-4"
                             : "hidden"
                     }
                 >
