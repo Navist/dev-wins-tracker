@@ -15,7 +15,7 @@ export default function DashboardPage() {
 
     useEffect(() => {
         if (!isAuthenticated()) {
-            router.push("/users/login");
+            router.push("/login");
             return;
         }
 
@@ -26,7 +26,7 @@ export default function DashboardPage() {
             } catch (error) {
                 console.error("Error fetching user:", error);
                 logout();
-                router.push("/users/login");
+                router.push("/login");
             }
         };
 

@@ -18,7 +18,7 @@ const SubscribersPage = () => {
 
     useEffect(() => {
         if (!isAuthenticated()) {
-            router.push("/users/login");
+            router.push("/login");
             return;
         }
 
