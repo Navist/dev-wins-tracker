@@ -32,7 +32,7 @@ export default function NavBar() {
                     View
                     <br /> Subscription
                 </button>
-                {pathname !== "/users/login" && (
+                {pathname !== "/login" && (
                     <button
                         onClick={() => {
                             logout();

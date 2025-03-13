@@ -5,5 +5,5 @@ export function isAuthenticated(): boolean {
 
 export function logout(){
     localStorage.removeItem("special_sauce");
-    window.location.href = "/users/login";
+    window.location.href = "/login";
 }
