@@ -13,8 +13,11 @@ router = APIRouter(
 )
 
 
-@router.post("/create/custom_category/", response_model=dict)
+@router.post("/create/custom_category/")
 def create_custom_category(category: CategoryCreate, db: Session = Depends(get_db), token_data: dict = Depends(verify_token)):
+
+    print(f"{category=}\n{token_data=}")
+
     category_db = db.query(CustomCategory)
     category_exists = category_db.filter(CustomCategory.name == category.name).first()
 
@@ -36,7 +39,7 @@ def create_custom_category(category: CategoryCreate, db: Session = Depends(get_d
     db.add(create_category)
     db.commit()
     
-    return {"message": f"'{category.name}' with description '{category.description}' successfully created!"}
+    return {"name": category.name, "description": category.description}
 
 
 @router.post("/create/predefined_category/", response_model=dict)
@@ -63,7 +66,7 @@ def create_predefined_category(category: CategoryCreate, db: Session = Depends(g
 
 
 
-@router.delete("/delete/custom_category/{category_id}", response_model=dict)
+@router.delete("/delete/custom_category/{category_id}/", response_model=dict)
 def delete_category(category_id: int, db: Session = Depends(get_db), token_data: dict = Depends(verify_token)):
     # Find all categories the user has, if category_name exists, delete it, otherwise raise HTTPException NOT FOUND
     user_categories = db.query(CustomCategory).filter(CustomCategory.user_id == token_data['user_id']).filter(CustomCategory.id == category_id).first()
@@ -79,7 +82,7 @@ def delete_category(category_id: int, db: Session = Depends(get_db), token_data:
 
 
 
-@router.delete("/delete/predefined_category", response_model=dict)
+@router.delete("/delete/predefined_category/", response_model=dict)
 def delete_category(category: CategoryGeneric, db: Session = Depends(get_db), token_data: dict = Depends(verify_token)):
 
     check_admin(db, token_data)
@@ -95,7 +98,7 @@ def delete_category(category: CategoryGeneric, db: Session = Depends(get_db), to
     return {"message": f"'{category.name}' successfully delete."}
 
 
-@router.get("/read/custom_categories")
+@router.get("/read/custom_categories/")
 def read_custom_categories(db: Session= Depends(get_db), token_data: dict= Depends(verify_token)):
     
     user_categories = db.query(CustomCategory).filter(CustomCategory.user_id == token_data['user_id']).all()
@@ -106,7 +109,7 @@ def read_custom_categories(db: Session= Depends(get_db), token_data: dict= Depen
     return user_categories
 
 
-@router.get("/read/predefined_categories")
+@router.get("/read/predefined_categories/")
 def read_custom_categories(db: Session= Depends(get_db), token_data: dict= Depends(verify_token)):
     check_admin(db, token_data)
     
@@ -129,7 +132,7 @@ def read_all_categories(db: Session = Depends(get_db), token_data: dict= Depends
     return all_categories
     
 
-@router.put("/update")
+@router.put("/update/")
 def update_category(category: CategoryUpdate, db: Session = Depends(get_db), token_data: dict = Depends(verify_token)):
 
     # Take a user input and adjust the category name if it is their category to alter.
