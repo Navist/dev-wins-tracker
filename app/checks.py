@@ -1,6 +1,7 @@
 from fastapi import HTTPException
 from app.database import SessionLocal
 from app.models import User
+from app.database import AsyncSessionLocal
 
 def check_db_user(db, token_data):
 
@@ -27,3 +28,9 @@ def get_db():
         yield db
     finally:
         db.close()
+
+
+# Async connection
+async def async_get_db():
+    async with AsyncSessionLocal() as session:
+        yield session
