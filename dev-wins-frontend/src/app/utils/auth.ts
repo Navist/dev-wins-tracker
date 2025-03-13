@@ -1,9 +1,9 @@
 export function isAuthenticated(): boolean {
     if (typeof window === "undefined") return false;
-    return !!localStorage.getItem("token");
+    return !!localStorage.getItem("special_sauce");
 }
 
 export function logout(){
-    localStorage.removeItem("token");
+    localStorage.removeItem("special_sauce");
     window.location.href = "/users/login";
 }

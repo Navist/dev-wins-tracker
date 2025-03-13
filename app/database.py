@@ -22,6 +22,7 @@ PORT = os.getenv('PORT')
 DB_TABLE = os.getenv('DB_TABLE')
 
 DATABASE_URL = f"{DATABASE}://{USERNAME}:{PASSWORD}@{HOST}:{PORT}/{DB_TABLE}"
+ASYNC_DATABASE_URL = f"{DATABASE}+asyncpg://{USERNAME}:{PASSWORD}@{HOST}:{PORT}/{DB_TABLE}"
 
 # print(DATABASE_URL)
 
@@ -33,5 +34,5 @@ Base = declarative_base()
 
 
 ## Async rewrite
-async_engine = create_async_engine(DATABASE_URL, echo=True)
+async_engine = create_async_engine(ASYNC_DATABASE_URL, echo=True)
 AsyncSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=async_engine, class_=AsyncSession)
