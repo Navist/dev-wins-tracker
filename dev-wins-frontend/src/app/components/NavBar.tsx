@@ -36,7 +36,7 @@ export default function NavBar() {
                     <button
                         onClick={() => {
                             logout();
-                            router.push("/users/login");
+                            router.push("/login");
                         }}
                         className="absolute bottom-10 left-3 px-4 py-2 bg-red-500 hover:bg-red-900 rounded w-32 cursor-pointer"
                     >
