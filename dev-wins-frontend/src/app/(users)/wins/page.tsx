@@ -1,10 +1,10 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { isAuthenticated } from "../utils/auth";
-import WinList from "../components/WinList";
+import { isAuthenticated } from "@/app/utils/auth";
+import WinList from "@/app/components/WinList";
 import { useEffect, useState } from "react";
-import { api } from "../utils/api";
-import WinModal from "../components/WinModal";
+import { api } from "@/app/utils/api";
+import WinModal from "@/app/components/WinModal";
 
 interface Win {
     id: number;
