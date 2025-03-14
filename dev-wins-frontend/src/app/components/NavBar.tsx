@@ -2,6 +2,7 @@
 import React from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { logout, isAuthenticated } from "../utils/auth";
+import { DropdownMenuHero } from "../components/DropDownButton";
 
 export default function NavBar() {
     const router = useRouter();
@@ -33,15 +34,9 @@ export default function NavBar() {
                     <br /> Subscription
                 </button>
                 {pathname !== "/login" && (
-                    <button
-                        onClick={() => {
-                            logout();
-                            router.push("/login");
-                        }}
-                        className="absolute bottom-10 left-3 px-4 py-2 bg-red-500 hover:bg-red-900 rounded w-32 cursor-pointer"
-                    >
-                        Logout
-                    </button>
+                    <div className="absolute bottom-10 left-3 w-32 px-4 py-2">
+                        <DropdownMenuHero />
+                    </div>
                 )}
             </nav>
         );
