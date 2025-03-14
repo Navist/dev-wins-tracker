@@ -3,7 +3,7 @@
 import React from "react";
 import * as TabsPrimitives from "@radix-ui/react-tabs";
 
-import { cx, focusRing } from "@/app/lib/utils";
+import { cx, focusRing } from "@/app/utils/utils";
 
 const Tabs = (
     props: Omit<

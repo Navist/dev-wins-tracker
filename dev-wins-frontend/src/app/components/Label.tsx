@@ -3,7 +3,7 @@
 import React from "react";
 import * as LabelPrimitives from "@radix-ui/react-label";
 
-import { cx } from "@/app/lib/utils";
+import { cx } from "@/app/utils/utils";
 
 interface LabelProps
     extends React.ComponentPropsWithoutRef<typeof LabelPrimitives.Root> {
