@@ -1,20 +1,10 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { GeistSans } from "geist/font/sans"; // import font
 import "./globals.css";
 import NavBar from "./components/NavBar";
 
-const geistSans = Geist({
-    variable: "--font-geist-sans",
-    subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-    variable: "--font-geist-mono",
-    subsets: ["latin"],
-});
-
 export const metadata: Metadata = {
-    title: "Wins Tracker",
+    title: "Wins Tracker 🏆",
     description: "Track your wins, no matter the size!",
 };
 
@@ -24,12 +14,14 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en">
-            <body
-                className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-            >
+        // add font to className, also add antialiased and dark mode
+        <html
+            lang="en"
+            className={`${GeistSans.className} antialiased dark:bg-gray-950`}
+        >
+            <body className="ml-40">
                 <NavBar />
-                <div className="ml-40">{children}</div>
+                {children}
             </body>
         </html>
     );
