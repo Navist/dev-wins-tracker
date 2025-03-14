@@ -136,7 +136,7 @@ export default function Categories() {
                     }}
                     className={
                         !modalState
-                            ? "border w-40 px-2 py-2 bg-green-800 rounded mt-4"
+                            ? "border w-40 px-2 py-2 bg-green-800 rounded mt-4 cursor-pointer"
                             : "hidden"
                     }
                 >
