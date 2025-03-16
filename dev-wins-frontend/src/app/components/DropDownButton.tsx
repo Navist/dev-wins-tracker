@@ -68,7 +68,14 @@ export const DropdownMenuHero = () => {
                                 <DropdownMenuIconWrapper>
                                     <RiSettings2Line className="size-4 text-inherit" />
                                 </DropdownMenuIconWrapper>
-                                <span>Account Settings</span>
+                                <button
+                                    onClick={() => {
+                                        router.push("/dashboard");
+                                    }}
+                                    className="cursor-pointer"
+                                >
+                                    <span>Account Settings</span>
+                                </button>
                             </span>
                         </DropdownMenuItem>
                     </DropdownMenuGroup>
@@ -165,6 +172,7 @@ export const DropdownMenuHero = () => {
                                     logout();
                                     router.push("/login");
                                 }}
+                                className="cursor-pointer"
                             >
                                 <span>Logout</span>
                             </button>
