@@ -42,7 +42,10 @@ export const DropdownMenuHero = () => {
         <div className="flex justify-center">
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <Button variant="secondary" className="cursor-pointer">
+                    <Button
+                        variant="secondary"
+                        className="cursor-pointer w-full"
+                    >
                         Options
                     </Button>
                 </DropdownMenuTrigger>
@@ -52,65 +55,66 @@ export const DropdownMenuHero = () => {
 
                     <DropdownMenuGroup>
                         <DropdownMenuItem>
-                            <span className="flex items-center gap-x-2">
-                                <RiArrowUpCircleLine className="size-4 text-blue-500" />
-                                <button
-                                    className="text-blue-500"
-                                    onClick={() =>
-                                        router.push("/subscriptions/")
-                                    }
-                                >
-                                    Upgrade
-                                </button>
-                            </span>
+                            <RiArrowUpCircleLine className="size-4 text-blue-500" />
+                            <button
+                                className="block w-full text-blue-500 text-left ml-2 cursor-pointer"
+                                onClick={() =>
+                                    router.push("/subscription/pricing")
+                                }
+                            >
+                                Upgrade
+                            </button>
                         </DropdownMenuItem>
-                        <DropdownMenuItem disabled shortcut="⌘B">
-                            <span className="flex items-center gap-x-2">
-                                <DropdownMenuIconWrapper>
-                                    <RiIdCardLine className="size-4 text-inherit" />
-                                </DropdownMenuIconWrapper>
-                                <span>Billing</span>
-                            </span>
+                        <DropdownMenuItem>
+                            <DropdownMenuIconWrapper>
+                                <RiIdCardLine className="size-4 text-inherit" />
+                            </DropdownMenuIconWrapper>
+                            <button
+                                className="block w-full h-full ml-2 text-left cursor-pointer"
+                                onClick={() =>
+                                    router.push("/subscription/status")
+                                }
+                            >
+                                Billing
+                            </button>
                         </DropdownMenuItem>
-                        <DropdownMenuItem shortcut="⌘S">
-                            <span className="flex items-center gap-x-2">
-                                <DropdownMenuIconWrapper>
-                                    <RiSettings2Line className="size-4 text-inherit" />
-                                </DropdownMenuIconWrapper>
-                                <button
-                                    onClick={() => {
-                                        router.push("/dashboard");
-                                    }}
-                                    className="cursor-pointer"
-                                >
-                                    <span>Account Settings</span>
-                                </button>
-                            </span>
+                        <DropdownMenuItem>
+                            <DropdownMenuIconWrapper>
+                                <RiSettings2Line className="size-4 text-inherit" />
+                            </DropdownMenuIconWrapper>
+                            <button
+                                onClick={() => {
+                                    router.push("/dashboard");
+                                }}
+                                className="block w-full ml-2 text-left cursor-pointer"
+                            >
+                                Account Settings
+                            </button>
                         </DropdownMenuItem>
                     </DropdownMenuGroup>
 
                     <DropdownMenuSeparator />
 
                     <DropdownMenuGroup>
-                        <DropdownMenuItem hint="Pro">
+                        {/* <DropdownMenuItem hint="Pro">
                             <span className="flex items-center gap-x-2">
                                 <RiUserSmileLine className="size-4 text-inherit" />
                                 <span>Manage workspace</span>
                             </span>
-                        </DropdownMenuItem>
+                        </DropdownMenuItem> */}
 
                         <DropdownMenuSubMenu>
                             <DropdownMenuSubMenuTrigger>
                                 <span className="flex items-center gap-x-2">
                                     <RiAddCircleLine className="size-4 text-inherit" />
-                                    <span>Invite users</span>
+                                    <span>Invite users WIP</span>
                                 </span>
                             </DropdownMenuSubMenuTrigger>
                             <DropdownMenuSubMenuContent>
                                 <DropdownMenuItem>
                                     <span className="flex items-center gap-x-2">
                                         <RiMailAddLine className="size-4 text-inherit" />
-                                        <span>Email</span>
+                                        <span>Email WIP</span>
                                     </span>
                                 </DropdownMenuItem>
 
@@ -118,32 +122,32 @@ export const DropdownMenuHero = () => {
                                     <DropdownMenuSubMenuTrigger>
                                         <span className="flex items-center gap-x-2">
                                             <RiMessageLine className="size-4 text-inherit" />
-                                            <span>Message</span>
+                                            <span>Message WIP</span>
                                         </span>
                                     </DropdownMenuSubMenuTrigger>
                                     <DropdownMenuSubMenuContent>
                                         <DropdownMenuItem>
                                             <span className="flex items-center gap-x-2">
                                                 <RiWhatsappLine className="size-4 text-inherit" />
-                                                <span>Whatsapp</span>
+                                                <span>Whatsapp WIP</span>
                                             </span>
                                         </DropdownMenuItem>
                                         <DropdownMenuItem>
                                             <span className="flex items-center gap-x-2">
                                                 <RiTelegramLine className="size-4 text-inherit" />
-                                                <span>Telegram</span>
+                                                <span>Telegram WIP</span>
                                             </span>
                                         </DropdownMenuItem>
                                         <DropdownMenuItem>
                                             <span className="flex items-center gap-x-2">
                                                 <RiDiscordLine className="size-4 text-inherit" />
-                                                <span>Discord</span>
+                                                <span>Discord WIP</span>
                                             </span>
                                         </DropdownMenuItem>
                                         <DropdownMenuItem>
                                             <span className="flex items-center gap-x-2">
                                                 <RiSlackLine className="size-4 text-inherit" />
-                                                <span>Slack</span>
+                                                <span>Slack WIP</span>
                                             </span>
                                         </DropdownMenuItem>
                                     </DropdownMenuSubMenuContent>
@@ -152,42 +156,42 @@ export const DropdownMenuHero = () => {
                                 <DropdownMenuItem>
                                     <span className="flex items-center gap-x-2">
                                         <RiAddCircleLine className="size-4 text-inherit" />
-                                        <span>More...</span>
+                                        <span>More... WIP</span>
                                     </span>
                                 </DropdownMenuItem>
                             </DropdownMenuSubMenuContent>
                         </DropdownMenuSubMenu>
-                        <DropdownMenuItem shortcut="⌘T">
+                        {/* <DropdownMenuItem shortcut="⌘T">
                             <span className="flex items-center gap-x-2">
                                 <RiAddLine className="size-4 text-inherit" />
                                 <span>New Workspace</span>
                             </span>
-                        </DropdownMenuItem>
+                        </DropdownMenuItem> */}
                     </DropdownMenuGroup>
 
                     <DropdownMenuSeparator />
 
                     <DropdownMenuItem>
-                        <span className="flex items-center gap-x-2">
-                            <RiHeartPulseLine className="size-4 text-inherit" />
-                            <a href="https://paypal.me/Navist" target="_blank">
-                                Support
-                            </a>
-                        </span>
+                        <RiHeartPulseLine className="size-4 text-inherit" />
+                        <a
+                            href="https://paypal.me/Navist"
+                            target="_blank"
+                            className="block w-full ml-2 text-left cursor-pointer"
+                        >
+                            Support
+                        </a>
                     </DropdownMenuItem>
-                    <DropdownMenuItem shortcut="⇧⌘Q">
-                        <span className="flex items-center gap-x-2">
-                            <RiLogoutBoxLine className="size-4 text-inherit" />
-                            <button
-                                onClick={() => {
-                                    logout();
-                                    router.push("/login");
-                                }}
-                                className="cursor-pointer"
-                            >
-                                <span>Logout</span>
-                            </button>
-                        </span>
+                    <DropdownMenuItem>
+                        <RiLogoutBoxLine className="size-4 text-inherit" />
+                        <button
+                            onClick={() => {
+                                logout();
+                                router.push("/login");
+                            }}
+                            className="block w-full ml-2 text-left cursor-pointer"
+                        >
+                            Logout
+                        </button>
                     </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
