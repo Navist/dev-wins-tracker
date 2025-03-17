@@ -42,7 +42,9 @@ export const DropdownMenuHero = () => {
         <div className="flex justify-center">
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <Button variant="secondary">Options</Button>
+                    <Button variant="secondary" className="cursor-pointer">
+                        Options
+                    </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="min-w-56">
                     <DropdownMenuLabel>My Account</DropdownMenuLabel>
@@ -52,7 +54,14 @@ export const DropdownMenuHero = () => {
                         <DropdownMenuItem>
                             <span className="flex items-center gap-x-2">
                                 <RiArrowUpCircleLine className="size-4 text-blue-500" />
-                                <span className="text-blue-500">Upgrade</span>
+                                <button
+                                    className="text-blue-500"
+                                    onClick={() =>
+                                        router.push("/subscriptions/")
+                                    }
+                                >
+                                    Upgrade
+                                </button>
                             </span>
                         </DropdownMenuItem>
                         <DropdownMenuItem disabled shortcut="⌘B">
@@ -161,7 +170,9 @@ export const DropdownMenuHero = () => {
                     <DropdownMenuItem>
                         <span className="flex items-center gap-x-2">
                             <RiHeartPulseLine className="size-4 text-inherit" />
-                            <span>Support</span>
+                            <a href="https://paypal.me/Navist" target="_blank">
+                                Support
+                            </a>
                         </span>
                     </DropdownMenuItem>
                     <DropdownMenuItem shortcut="⇧⌘Q">
