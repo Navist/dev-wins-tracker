@@ -27,7 +27,7 @@ export default function NavBar() {
                     Categories
                 </button>
                 <button
-                    onClick={() => router.push("/subscriptions")}
+                    onClick={() => router.push("/subscription/status")}
                     className="px-4 py-2 bg-green-800 hover:bg-cyan-600 hover:w-40 rounded w-full cursor-pointer duration-100"
                 >
                     View
