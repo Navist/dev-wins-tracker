@@ -25,7 +25,7 @@ export default function WinCard({
     onEdit,
 }: WinProps) {
     return (
-        <div className="relative border p-4 rounded shadow-md group hover:bg-gray-700 hover:shadow-blue-300 transition duration-150">
+        <div className="relative border p-4 rounded shadow-md group hover:bg-gradient-to-t from-gray-800 to-gray-500 hover:shadow-blue-300 transition duration-150">
             <button
                 onClick={() => onEdit({ id, title, category, description })}
                 className="absolute bottom-2 left-2 text-gray-500 hover:text-red-500 opacity-0 group-hover:opacity-100 transition cursor-pointer"

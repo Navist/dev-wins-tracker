@@ -21,55 +21,69 @@ import React from "react";
 
 const PricingPage = () => {
     return (
-        <div className="grid grid-cols-1 md:grid-cols-3 items-center mx-65 h-screen py-10">
-            <div className="flex flex-col justify-between text-left border p-6 w-full max-w-[350px] h-[400px] rounded-xl">
-                <h1 className="text-center text-3xl divide-x-2">Free Tier</h1>
-                <hr className="mb-4" />
-                <ul className="mt-auto text-center place-content-center">
-                    <li className="text-xl">30 Win Cards</li>
-                    <li className="text-xl">10 Custom Categories</li>
-                </ul>
-                <button className="mt-auto bg-gray-500 text-white px-4 py-2 rounded">
-                    Current Tier
-                </button>
+        <div>
+            <div className="hidden md:hidden transform translate-y-60 bg-gray-500 p-4 rounded-2xl text-center justify-center max-w-150 ml-135 opacity-100">
+                <span className="text-6xl text-white">Select A Tier</span>
             </div>
-            <div className="flex flex-col justify-between text-center border p-6 w-full max-w-[350px] h-[400px] rounded-xl">
-                <h1 className="text-3xl">Premium</h1>
-                <hr className="mb-4" />
-                <ul>
-                    <li className="">All features in the Free Tier</li>
-                    <li className="font-bold">AND</li>
+            <div className="grid grid-cols-1 md:grid-cols-3 items-center mx-65 h-screen py-10">
+                <div className="flex flex-col justify-between text-left border p-6 w-full max-w-[350px] h-[400px] rounded-xl hover:border-indigo-400 transition duration-400 hover:size-[600px] bg-gray-800 hover:bg-cyan-900">
+                    <h1 className="text-center text-3xl divide-x-2">
+                        Free Tier
+                    </h1>
+                    <hr className="mb-4" />
+                    <ul className="mt-auto text-center place-content-center">
+                        <li className="text-xl">30 Win Cards</li>
+                        <li className="text-xl">10 Custom Categories</li>
+                    </ul>
+                    <h1 className="mt-auto text-2xl text-center">
+                        Free! <h1>But limited :(</h1>
+                    </h1>
+                    <button className="mt-auto bg-gray-500 text-white px-4 py-2 rounded">
+                        Current Tier
+                    </button>
+                </div>
+                <div className="flex flex-col justify-between text-center border p-6 w-full max-w-[350px] h-[400px] rounded-xl hover:border-indigo-400 transition duration-400 hover:size-[600px] bg-gray-800 hover:bg-cyan-900">
+                    <h1 className="text-3xl">Premium</h1>
+                    <hr className="mb-4" />
+                    <ul>
+                        <li className="">All features in the Free Tier</li>
+                        <li className="font-bold">AND</li>
 
-                    <li className="font-bold underline mb-4">An additional</li>
-                    <li className="text-xl">300 Win Cards</li>
-                    <li className="text-xl">30 Custom Categories</li>
-                </ul>
-                <h1 className="mt-auto text-2xl">
-                    $4.99 <h1 className="text-sm inline">/month</h1>
-                </h1>
-                <button className="mt-auto bg-blue-500 text-white px-4 py-2 rounded hover:bg-green-400 cursor-pointer">
-                    Subscribe
-                </button>
-            </div>
-            <div className="flex flex-col justify-between text-center border p-6 w-full max-w-[350px] h-[400px] rounded-xl">
-                <h1 className="text-center text-3xl">Enterprise</h1>
-                <hr className="mb-4" />
-                <ul>
-                    <li className="text-inherit">
-                        All features in Free & Premium Tier
-                    </li>
-                    <li className="font-bold">AND</li>
+                        <li className="font-bold underline mb-4">
+                            An additional
+                        </li>
+                        <li className="text-xl">300 Win Cards</li>
+                        <li className="text-xl">30 Custom Categories</li>
+                    </ul>
+                    <h1 className="mt-auto text-2xl">
+                        $4.99 <h1 className="text-sm inline">/month</h1>
+                    </h1>
+                    <button className="mt-auto bg-blue-500 text-white px-4 py-2 rounded hover:bg-green-400 cursor-pointer">
+                        Subscribe
+                    </button>
+                </div>
+                <div className="flex flex-col justify-between text-center border p-6 w-full max-w-[350px] h-[400px] rounded-xl hover:border-indigo-400 transition duration-400 hover:size-[600px] bg-gray-800 hover:bg-cyan-900">
+                    <h1 className="text-center text-3xl">Enterprise</h1>
+                    <hr className="mb-4" />
+                    <ul>
+                        <li className="text-inherit">
+                            All features in Free & Premium Tier
+                        </li>
+                        <li className="font-bold">AND</li>
 
-                    <li className="font-bold underline mb-4">An additional</li>
-                    <li className="text-xl">3000 Win Cards</li>
-                    <li className="text-xl">300 Custom Categories</li>
-                </ul>
-                <h1 className="mt-auto text-2xl">
-                    $20.99 <h1 className="text-sm inline">/month</h1>
-                </h1>
-                <button className="mt-auto bg-blue-500 text-white px-4 py-2 rounded hover:bg-green-400 cursor-pointer">
-                    Subscribe
-                </button>
+                        <li className="font-bold underline mb-4">
+                            An additional
+                        </li>
+                        <li className="text-xl">3000 Win Cards</li>
+                        <li className="text-xl">300 Custom Categories</li>
+                    </ul>
+                    <h1 className="mt-auto text-2xl">
+                        $20.99 <h1 className="text-sm inline">/month</h1>
+                    </h1>
+                    <button className="mt-auto bg-blue-500 text-white px-4 py-2 rounded hover:bg-green-400 cursor-pointer">
+                        Subscribe
+                    </button>
+                </div>
             </div>
         </div>
     );
